@@ -60,13 +60,13 @@ function gameSetup(canvasId) {
     canvas.addEventListener("click", shoot);
     
     playerShipImage = new Image();
-    playerShipImage.src = 'player.png';
+    playerShipImage.src = 'images/player.png';
 
     greenLaser = new Image();
-    greenLaser.src = 'laserGreen.png';
+    greenLaser.src = 'images/laserGreen.png';
 
     enemyShipImage = new Image();
-    enemyShipImage.src = 'enemyShip.png';
+    enemyShipImage.src = 'images/enemyShip.png';
 
     enemies = [];
     addEnemy(1, 1);
