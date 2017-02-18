@@ -56,7 +56,7 @@ class Player extends Sprite {
         super(ctx, image, x, y, width, height, speed);
         this.bullets = 2;
         this.gun = greenLaser;
-        this.lives = 2;
+        this.lives = 3;
     }
 }
 
@@ -72,6 +72,8 @@ function gameSetup(canvasId) {
     
     playerShipImage = new Image();
     playerShipImage.src = 'images/player.png';
+    playerShipShieldImage = new Image();
+    playerShipShieldImage.src = 'images/playerShield.png';
     playerShipDamagedImage = new Image();
     playerShipDamagedImage.src = 'images/playerDamaged.png';
     
@@ -84,34 +86,35 @@ function gameSetup(canvasId) {
     enemyShipImage.src = 'images/enemyShip.png';
 
     enemies = [];
-    addEnemy(1, 1);
-    addEnemy(111, 1);
-    addEnemy(221, 1);
-    addEnemy(331, 1);
-    addEnemy(441, 1);
+    addEnemy(51, 1);
+    addEnemy(161, 1);
+    addEnemy(271, 1);
+    addEnemy(381, 1);
+    addEnemy(491, 1);
 
     addEnemy(1, 100);
     addEnemy(111, 100);
     addEnemy(221, 100);
     addEnemy(331, 100);
     addEnemy(441, 100);
-
-    addEnemy(1, 199);
-    addEnemy(111, 199);
-    addEnemy(221, 199);
-    addEnemy(331, 199);
-    addEnemy(441, 199);
+    addEnemy(551, 100);
+    
+    addEnemy(51, 199);
+    addEnemy(161, 199);
+    addEnemy(271, 199);
+    addEnemy(381, 199);
+    addEnemy(491, 199);
 
     bullets = [];
     enemyBullets = [];
     
     player = new Player (
         ctx,
-        playerShipImage,
-        (canvas.width - playerShipImage.width)/2,
-        (canvas.height - playerShipImage.height - 10),
-        playerShipImage.width,
-        playerShipImage.height,
+        playerShipShieldImage,
+        (canvas.width - playerShipShieldImage.width)/2,
+        (canvas.height - playerShipShieldImage.height - 10),
+        playerShipShieldImage.width,
+        playerShipShieldImage.height,
         1
     );
 
@@ -153,7 +156,15 @@ function checkBulletCollisions() {
         if(Sprite.collides(player, enemyBullets[i])){
             enemyBullets.splice(i, 1);
             player.lives -= 1;
-            player.image = playerShipDamagedImage;
+            if(player.lives == 2) {
+                player.image = playerShipImage;
+                player.height = playerShipImage.height;
+                player.width = playerShipImage.width;
+            } else if (player.lives == 1) {
+                player.image = playerShipDamagedImage;
+                player.height = playerShipDamagedImage.height;
+                player.width = playerShipDamagedImage.width;
+            }
         }
         if(enemyBullets[i].y + enemyBullets[i].height <= 0 || enemyBullets[i].y >= canvas.height) {
             enemyBullets.splice(i, 1);

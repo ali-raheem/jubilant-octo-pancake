@@ -1,4 +1,4 @@
-# jubilant-octo-pancake v 0.1.3
+# jubilant-octo-pancake v 0.1.4
 
 JOP is a space-invaders style clone
 
