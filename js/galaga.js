@@ -60,7 +60,7 @@ function gameSetup(canvasId) {
     canvas.height = 520;
 
     canvas.addEventListener("mousemove", function(e){player.x = e.pageX - player.width/2});
-    canvas.addEventListener("click", shoot);
+    canvas.addEventListener("click", addBullet);
     
     playerShipImage = new Image();
     playerShipImage.src = 'images/player.png';
@@ -111,7 +111,7 @@ function animateBullets() {
     }
 }
 
-function shoot () {
+function addBullet () {
     var bullet = new Bullet(
         ctx,
         greenLaser,
