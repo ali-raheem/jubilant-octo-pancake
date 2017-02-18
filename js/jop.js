@@ -54,9 +54,9 @@ class Enemy extends Sprite {
 class Player extends Sprite {
     constructor(ctx, image, x, y, width, height, speed) {
         super(ctx, image, x, y, width, height, speed);
-        this.bullets = 5;
+        this.bullets = 2;
         this.gun = greenLaser;
-        this.alive = true;
+        this.lives = 2;
     }
 }
 
@@ -72,7 +72,9 @@ function gameSetup(canvasId) {
     
     playerShipImage = new Image();
     playerShipImage.src = 'images/player.png';
-
+    playerShipDamagedImage = new Image();
+    playerShipDamagedImage.src = 'images/playerDamaged.png';
+    
     greenLaser = new Image();
     greenLaser.src = 'images/laserGreen.png';
     redLaser = new Image();
@@ -119,13 +121,13 @@ function loop() {
     if(enemies.length == 0){
         ctx.fillStyle = 'white';
         ctx.font = '48px Serif';
-        ctx.fillText("You win!", canvas.width/2, canvas.height/2);
+        ctx.fillText("You win!", canvas.width/2-100, canvas.height/2);
         running = false;
     }
-    if(player.alive == false) {
+    if(player.lives == 0) {
         ctx.fillStyle = 'red';
         ctx.font = '48px Serif';
-        ctx.fillText("You died!", canvas.width/2, canvas.height/2);
+        ctx.fillText("You died!", canvas.width/2-100, canvas.height/2);
         running = false;
     }
     if(running)
@@ -137,7 +139,9 @@ function animateBullets() {
         bullets[i].update();
         bullets[i].render();
         if(Sprite.collides(player, bullets[i])){
-            player.alive = false;
+            bullets.splice(i, 1);
+            player.lives -= 1;
+            player.image = playerShipDamagedImage;
             break;
         }
         if(bullets[i].y + bullets[i].height <= 0 || bullets[i].y >= canvas.height) {
