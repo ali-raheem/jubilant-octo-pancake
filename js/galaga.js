@@ -20,8 +20,11 @@ class animatedSprite extends Sprite {
         this.frameIndex = 0;
         this.tickPerFrame = tickPerFrame;
         this.ticks = 0;
-
     }
+    render() {
+        this.ctx.drawImage(this.image, this.width*this.frameIndex, this.y, this.width, this.height, this.x, this.y, this.width, this.height);
+    }
+
 }
 class Bullet extends Sprite {
     update () {
@@ -78,10 +81,10 @@ function gameSetup(canvasId) {
     player = new Player (
         ctx,
         playerShipImage,
-        (canvas.width-99)/2,
-        (canvas.height - 75 - 10),
-        99,
-        75,
+        (canvas.width-playerShipImage.width)/2,
+        (canvas.height - playerShipImage.height - 10),
+        playerShipImage.width,
+        playerShipImage.height,
         1
     );
 
@@ -114,8 +117,8 @@ function shoot () {
         greenLaser,
         player.x + player.width/2 - 4,
         player.y + player.height/2,
-        9,
-        33,
+        greenLaser.width,
+        greenLaser.height,
         3
     );
     bullets.push(bullet);
@@ -127,8 +130,8 @@ function addEnemy (x, y) {
         enemyShipImage,
         x,
         y,
-        98,
-        50,
+        enemyShipImage.width,
+        enemyShipImage.height,
         3
     );
     enemies.push(enemy);
