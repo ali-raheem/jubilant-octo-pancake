@@ -95,7 +95,13 @@ function gameSetup(canvasId) {
     addEnemy(221, 100);
     addEnemy(331, 100);
     addEnemy(441, 100);
-    
+
+    addEnemy(1, 199);
+    addEnemy(111, 199);
+    addEnemy(221, 199);
+    addEnemy(331, 199);
+    addEnemy(441, 199);
+
     bullets = [];
     enemyBullets = [];
     
@@ -116,20 +122,19 @@ function gameSetup(canvasId) {
 function loop() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    checkBulletHits();
-    checkBulletMisses();
+    checkBulletCollisions();
     animateBullets();
     animateEnemies();
     player.render();
     if(enemies.length == 0){
         ctx.fillStyle = 'white';
-        ctx.font = '48px Serif';
+        ctx.font = 'small-caps bold 48px Serif';
         ctx.fillText("You win!", canvas.width/2-100, canvas.height/2);
         running = false;
     }
     if(player.lives == 0) {
         ctx.fillStyle = 'red';
-        ctx.font = '48px Serif';
+        ctx.font = 'small-caps bold 48px Serif';
         ctx.fillText("You died!", canvas.width/2-100, canvas.height/2);
         running = false;
     }
@@ -137,24 +142,19 @@ function loop() {
         requestAnimationFrame(loop);
 }
 
-function checkBulletHits() {
-    for (i = 0; i < enemyBullets.length; i++) {
-        if(Sprite.collides(player, enemyBullets[i])){
-            enemyBullets.splice(i, 1);
-            player.lives -= 1;
-            player.image = playerShipDamagedImage;
-            break;
-        }
-    }
-}
 
-function checkBulletMisses() {
+function checkBulletCollisions() {
     for (i = 0; i < bullets.length; i++) {
         if(bullets[i].y + bullets[i].height <= 0 || bullets[i].y >= canvas.height) {
             bullets.splice(i, 1);
         }
     }
     for (i = 0; i < enemyBullets.length; i++) {
+        if(Sprite.collides(player, enemyBullets[i])){
+            enemyBullets.splice(i, 1);
+            player.lives -= 1;
+            player.image = playerShipDamagedImage;
+        }
         if(enemyBullets[i].y + enemyBullets[i].height <= 0 || enemyBullets[i].y >= canvas.height) {
             enemyBullets.splice(i, 1);
         }
@@ -162,13 +162,12 @@ function checkBulletMisses() {
 }
 
 function animateBullets() {
-    for (i = 0; i < bullets.length; i++) {
-        bullets[i].update();
-        bullets[i].render();
+    var allBullets = bullets.concat(enemyBullets);
+    for (i = 0; i < allBullets.length; i++) {
+        allBullets[i].update();
     }
-    for (i = 0; i < enemyBullets.length; i++) {
-        enemyBullets[i].update();
-        enemyBullets[i].render();
+    for (i = 0; i < allBullets.length; i++) {
+        allBullets[i].render();
     }
 }
 
