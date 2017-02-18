@@ -67,7 +67,10 @@ function gameSetup(canvasId) {
     canvas.width = 1280;
     canvas.height = 520;
 
-    canvas.addEventListener("mousemove", function(e){player.x = e.pageX - player.width/2});
+    canvas.addEventListener("mousemove", function(e){
+        player.x = e.pageX - player.width/2;
+        player.y = e.pageY - player.height/2;
+    });
     canvas.addEventListener("click", addBullet);
     
     playerShipImage = new Image();

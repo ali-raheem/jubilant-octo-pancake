@@ -1,6 +1,6 @@
-# jubilant-octo-pancake v 0.1.5
+# jubilant-octo-pancake v 0.2.0
 
-JOP is a space-invaders style clone
+JOP is a galaga style clone, you can now move in 2 dimensions.
 
 ## Running
 
