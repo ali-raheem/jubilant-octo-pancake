@@ -1,4 +1,6 @@
-# Unnamed Galaga Clone in Javascript v 0.1.0
+# jubilant-octo-pancake v 0.1.1
+
+JOP is a space-invaders style clone
 
 ## Running
 
