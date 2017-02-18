@@ -97,7 +97,8 @@ function gameSetup(canvasId) {
     addEnemy(441, 100);
     
     bullets = [];
-
+    enemyBullets = [];
+    
     player = new Player (
         ctx,
         playerShipImage,
@@ -115,6 +116,8 @@ function gameSetup(canvasId) {
 function loop() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    checkBulletHits();
+    checkBulletMisses();
     animateBullets();
     animateEnemies();
     player.render();
@@ -134,19 +137,38 @@ function loop() {
         requestAnimationFrame(loop);
 }
 
-function animateBullets() {
-    for (i = 0; i < bullets.length; i++) {
-        bullets[i].update();
-        bullets[i].render();
-        if(Sprite.collides(player, bullets[i])){
-            bullets.splice(i, 1);
+function checkBulletHits() {
+    for (i = 0; i < enemyBullets.length; i++) {
+        if(Sprite.collides(player, enemyBullets[i])){
+            enemyBullets.splice(i, 1);
             player.lives -= 1;
             player.image = playerShipDamagedImage;
             break;
         }
+    }
+}
+
+function checkBulletMisses() {
+    for (i = 0; i < bullets.length; i++) {
         if(bullets[i].y + bullets[i].height <= 0 || bullets[i].y >= canvas.height) {
             bullets.splice(i, 1);
         }
+    }
+    for (i = 0; i < enemyBullets.length; i++) {
+        if(enemyBullets[i].y + enemyBullets[i].height <= 0 || enemyBullets[i].y >= canvas.height) {
+            enemyBullets.splice(i, 1);
+        }
+    }
+}
+
+function animateBullets() {
+    for (i = 0; i < bullets.length; i++) {
+        bullets[i].update();
+        bullets[i].render();
+    }
+    for (i = 0; i < enemyBullets.length; i++) {
+        enemyBullets[i].update();
+        enemyBullets[i].render();
     }
 }
 
@@ -175,7 +197,7 @@ function addEnemyBullet (enemy) {
         redLaser.height,
         -3
     );
-    bullets.push(bullet);
+    enemyBullets.push(bullet);
 }
 
 
@@ -198,7 +220,7 @@ function animateEnemies() {
             enemies[i].update();
             enemies[i].render();
             // Random chance enemy will shoot.
-            if(Math.random() <= 0.001)
+            if(Math.random() <= 0.01)
                 addEnemyBullet(enemies[i]);
             if(0 < bullets.length) {
                 for(j = 0; j < bullets.length; j++) {
