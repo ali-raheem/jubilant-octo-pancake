@@ -1,4 +1,4 @@
-# jubilant-octo-pancake v 0.2.0
+# jubilant-octo-pancake v 0.2.1
 
 JOP is a galaga style clone, you can now move in 2 dimensions.
 
@@ -8,7 +8,7 @@ Open index.htm in browser. Tested in firefox.
 
 ## Demo
 
-On github pages [https://wolfmankurd.github.io/jubilant-octo-pancake/].
+[On github pages](https://wolfmankurd.github.io/jubilant-octo-pancake/).
 
 ### ToDo
 
