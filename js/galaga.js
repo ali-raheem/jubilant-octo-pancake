@@ -33,13 +33,16 @@ class Bullet extends Sprite {
 }
 
 class Enemy extends Sprite {
+    constructor(ctx, image, x, y, width, height, speed) {
+        super(ctx, image, x, y, width, height, speed);
+        this.alive = true;
+    }
     update () {
         if ((this.x + this.width >= canvas.width && this.speed > 0) || (this.x <= 0 && this.speed <0)) {
             this.y += this.height;
             this.speed = -this.speed;
         } else {
             this.x += this.speed;
-            
         }   
     }
 }
@@ -67,21 +70,31 @@ function gameSetup(canvasId) {
 
     greenLaser = new Image();
     greenLaser.src = 'images/laserGreen.png';
+    redLaser = new Image();
+    redLaser.src = 'images/laserRed.png';
 
     enemyShipImage = new Image();
     enemyShipImage.src = 'images/enemyShip.png';
 
     enemies = [];
     addEnemy(1, 1);
-    addEnemy(101, 1)
-    addEnemy(201, 1)
+    addEnemy(111, 1);
+    addEnemy(221, 1);
+    addEnemy(331, 1);
+    addEnemy(441, 1);
+
+    addEnemy(1, 100);
+    addEnemy(111, 100);
+    addEnemy(221, 100);
+    addEnemy(331, 100);
+    addEnemy(441, 100);
     
     bullets = [];
 
     player = new Player (
         ctx,
         playerShipImage,
-        (canvas.width-playerShipImage.width)/2,
+        (canvas.width - playerShipImage.width)/2,
         (canvas.height - playerShipImage.height - 10),
         playerShipImage.width,
         playerShipImage.height,
@@ -92,22 +105,21 @@ function gameSetup(canvasId) {
 }
 
 function loop() {
-    requestAnimationFrame(loop);
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     animateBullets();
     animateEnemies();
     player.render();    
+    requestAnimationFrame(loop);
 }
 
 function animateBullets() {
-    numBullets = bullets.length;
-    for (i = 0; i < numBullets; i++) {
+    for (i = 0; i < bullets.length; i++) {
         bullets[i].update();
         bullets[i].render();
-        if(bullets[i].y+bullets[i].width <= 0) {
+        if(bullets[i].y + bullets[i].height <= 0 || bullets[i].y >= canvas.height) {
             bullets.splice(i, 1);
-         }
+        }
     }
 }
 
@@ -124,6 +136,20 @@ function addBullet () {
     bullets.push(bullet);
 }
 
+function addEnemyBullet (enemy) {
+    var bullet = new Bullet(
+        ctx,
+        redLaser,
+        enemy.x + enemy.width/2 - 4,
+        enemy.y + enemy.height/2,
+        redLaser.width,
+        redLaser.height,
+        -3
+    );
+    bullets.push(bullet);
+}
+
+
 function addEnemy (x, y) {
     var enemy = new Enemy (
         ctx,
@@ -138,16 +164,21 @@ function addEnemy (x, y) {
 }
 
 function animateEnemies() {
-    numEnemies = enemies.length;
-    for (i = 0; i <numEnemies; i++) {
-        enemies[i].update();
-        enemies[i].render();
-//        for (j = 0; i < bullets.length; j++)
-//            if(rectCollision(enemies[i], bullets[j])) {
-//                enemies.splice(i, 1);
-//                break;
+    for (i = 0; i < enemies.length; i++) {
+        if(enemies[i].alive) {
+            enemies[i].update();
+            enemies[i].render();
+            // Random chance enemy will shoot.
+            if(Math.random() <= 0.001) {
+                addEnemyBullet(enemies[i]);
+            }
+//            for (j = 0; i < bullets.length; j++) {
+//                if(rectCollision(enemies[i], bullets[j])) {
+//                    enemies[i].alive = false;
+//                    break;
+//                }
 //            }
-//    }
+        }
     }
 }
 
