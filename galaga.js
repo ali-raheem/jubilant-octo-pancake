@@ -7,16 +7,22 @@ class Sprite {
         this.width = width;
         this.height = height;
         this.speed = speed;
-//        this.frames = frames;
-//        this.frameIndex = frameIndex;
-//        this.tickPerFrame = tickPerFrame;
-//        this.ticks = 0;
     }
     render() {
         this.ctx.drawImage(this.image, this.x, this.y);
     }
 }
 
+class animatedSprite extends Sprite {
+    constructor (ctx, image, x, y, width, height, speed, frames, tickPerFrame) {
+        super(ctx, image, x, y, width, height, speed);        
+        this.frames = frames;
+        this.frameIndex = 0;
+        this.tickPerFrame = tickPerFrame;
+        this.ticks = 0;
+
+    }
+}
 class Bullet extends Sprite {
     update () {
         this.y -= this.speed;
@@ -34,6 +40,15 @@ class Enemy extends Sprite {
         }   
     }
 }
+
+class Player extends Sprite {
+    constructor(ctx, image, x, y, width, height, speed) {
+        super(ctx, image, x, y, width, height, speed);
+        this.bullets = 5;
+        this.gun = greenLaser;
+    }
+}
+
 
 function gameSetup(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -60,7 +75,7 @@ function gameSetup(canvasId) {
     
     bullets = [];
 
-    player = new Sprite(
+    player = new Player (
         ctx,
         playerShipImage,
         (canvas.width-99)/2,
@@ -84,7 +99,7 @@ function loop() {
 
 function animateBullets() {
     numBullets = bullets.length;
-    for (i = 0; i <numBullets; i++) {
+    for (i = 0; i < numBullets; i++) {
         bullets[i].update();
         bullets[i].render();
         if(bullets[i].y+bullets[i].width <= 0) {
@@ -129,6 +144,7 @@ function animateEnemies() {
 //                enemies.splice(i, 1);
 //                break;
 //            }
+//    }
     }
 }
 
