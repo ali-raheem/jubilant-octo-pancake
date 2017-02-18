@@ -13,7 +13,3 @@ open index.htm in browser
 - Music
 - Background
 - Scripted levels
-
-## Credits
-
-Kenney (Kenney.nl) via [OpenGameArt.org](http://opengameart.org/content/space-shooter-art)
