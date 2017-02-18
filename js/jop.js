@@ -129,13 +129,13 @@ function loop() {
     animateBullets();
     animateEnemies();
     player.render();
-    if(enemies.length == 0){
+    if(0 == enemies.length){
         ctx.fillStyle = 'white';
         ctx.font = 'small-caps bold 48px Serif';
         ctx.fillText("You win!", canvas.width/2-100, canvas.height/2);
         running = false;
     }
-    if(player.lives == 0) {
+    if(0 == player.lives) {
         ctx.fillStyle = 'red';
         ctx.font = 'small-caps bold 48px Serif';
         ctx.fillText("You died!", canvas.width/2-100, canvas.height/2);
@@ -153,21 +153,27 @@ function checkBulletCollisions() {
         }
     }
     for (i = 0; i < enemyBullets.length; i++) {
-        if(Sprite.collides(player, enemyBullets[i])){
-            enemyBullets.splice(i, 1);
-            player.lives -= 1;
-            if(player.lives == 2) {
-                player.image = playerShipImage;
-                player.height = playerShipImage.height;
-                player.width = playerShipImage.width;
-            } else if (player.lives == 1) {
-                player.image = playerShipDamagedImage;
-                player.height = playerShipDamagedImage.height;
-                player.width = playerShipDamagedImage.width;
-            }
-        }
+        // Remove bullets which are off screen.
         if(enemyBullets[i].y + enemyBullets[i].height <= 0 || enemyBullets[i].y >= canvas.height) {
             enemyBullets.splice(i, 1);
+        } else {
+            // Check for bullet player damage.
+            if(Sprite.collides(player, enemyBullets[i])){
+                enemyBullets.splice(i, 1);
+                player.lives -= 1;
+                if(player.lives == 2) {
+                    player.image = playerShipImage;
+                    player.height = playerShipImage.height;
+                    player.width = playerShipImage.width;
+                    player.y = canvas.height - playerShipImage.height - 10;
+                    //FIXME : centre new sprite.
+                    //                    player.x = (canvas.width - playerShipImage.width)/2;
+                } else if (player.lives == 1) {
+                    player.image = playerShipDamagedImage;
+                    player.height = playerShipDamagedImage.height;
+                    player.width = playerShipDamagedImage.width;
+                }
+            }
         }
     }
 }
@@ -232,6 +238,7 @@ function animateEnemies() {
             // Random chance enemy will shoot.
             if(Math.random() <= 0.01)
                 addEnemyBullet(enemies[i]);
+            // Check for bullets hit.
             if(0 < bullets.length) {
                 for(j = 0; j < bullets.length; j++) {
                     if(Sprite.collides(bullets[j], enemies[i])){

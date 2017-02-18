@@ -1,4 +1,4 @@
-# jubilant-octo-pancake v 0.1.4
+# jubilant-octo-pancake v 0.1.5
 
 JOP is a space-invaders style clone
 
@@ -13,3 +13,4 @@ open index.htm in browser
 - Music
 - Background
 - Scripted levels
+- Make damaged sprite not move.
