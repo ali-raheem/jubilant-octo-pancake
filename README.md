@@ -16,4 +16,4 @@ open index.htm in browser
 
 ## Credits
 
-Kenney on OpenGameArt.org - http://opengameart.org/content/space-shooter-art
+Kenney (Kenney.nl) via [OpenGameArt.org](http://opengameart.org/content/space-shooter-art)
