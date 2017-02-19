@@ -1,4 +1,4 @@
-# jubilant-octo-pancake v 0.2.1
+# jubilant-octo-pancake v 0.2.2
 
 JOP is a galaga style clone, you can now move in 2 dimensions.
 
