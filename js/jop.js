@@ -72,6 +72,7 @@ function gameSetup(canvasId) {
         player.y = e.pageY - player.height/2;
     });
     canvas.addEventListener("click", addBullet);
+//    canvas.addEventListener("keydown", function(e) {if(e.keyCode == 'b') addBomb()});
     
     playerShipImage = new Image();
     playerShipImage.src = 'images/player.png';
@@ -82,6 +83,8 @@ function gameSetup(canvasId) {
     
     greenLaser = new Image();
     greenLaser.src = 'images/laserGreen.png';
+    greenBomb = new Image();
+    greenBomb.src = 'images/laserGreenShot.png';
     redLaser = new Image();
     redLaser.src = 'images/laserRed.png';
 
@@ -206,6 +209,21 @@ function addBullet () {
     bullets.push(bullet);
 }
 
+function addBomb () {
+    if(bullets.length >= player.bullets)
+        return;
+    var bullet = new Bullet(
+        ctx,
+        greenBomb,
+        player.x + player.width/2 - 4,
+        player.y + greenBomb.height/2,
+        greenBomb.width,
+        greenBomb.height,
+        0
+    );
+    bullets.push(bullet);
+}
+
 function addEnemyBullet (enemy) {
     var bullet = new Bullet(
         ctx,
@@ -239,7 +257,7 @@ function animateEnemies() {
             enemies[i].update();
             enemies[i].render();
             // Random chance enemy will shoot.
-            if(Math.random() <= 0.01)
+            if(Math.random() <= 0.001)
                 addEnemyBullet(enemies[i]);
             // Check for bullets hit.
             if(0 < bullets.length) {
