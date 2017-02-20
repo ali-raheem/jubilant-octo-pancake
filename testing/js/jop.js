@@ -33,6 +33,9 @@ class animatedSprite extends Sprite {
 class Bullet extends Sprite {
     update () {
         this.y -= this.speed;
+        if(this.image==redBomb){
+            this.x += (player.x - this.x)/75;
+        }
     }    
 }
 
