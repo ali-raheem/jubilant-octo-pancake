@@ -89,7 +89,8 @@ function gameSetup(canvasId) {
     playerShipShieldImage.src = 'images/playerShield.png';
     playerShipDamagedImage = new Image();
     playerShipDamagedImage.src = 'images/playerDamaged.png';
-    
+
+    HPBarColour = 'green';
     greenLaser = new Image();
     greenLaser.src = 'images/laserGreen.png';
     greenBomb = new Image();
@@ -160,7 +161,7 @@ function loop() {
     }
     ctx.fillStyle = 'white';
     ctx.fillRect(10, canvas.height - 20 - 10, 302, 20);
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = HPBarColour;
     ctx.fillRect(11, canvas.height - 20 - 9, 3*player.HP, 18);
     if(running)
         requestAnimationFrame(loop);
@@ -184,8 +185,11 @@ function checkBulletCollisions() {
                 player.HP -= 1;
                 if(player.HP == 0) {
                     player.lives -= 1;
+                    if(player.lives == 0)
+                        break;
                     player.HP = 100;
                     if(player.lives == 2) {
+                        HPBarColour = 'yellow';
                         player.image = playerShipImage;
                         player.height = playerShipImage.height;
                         player.width = playerShipImage.width;
@@ -193,6 +197,7 @@ function checkBulletCollisions() {
                         //FIXME : centre new sprite.
                         //                    player.x = (canvas.width - playerShipImage.width)/2;
                     } else if (player.lives == 1) {
+                        HPBarColour = 'red';
                         player.image = playerShipDamagedImage;
                         player.height = playerShipDamagedImage.height;
                         player.width = playerShipDamagedImage.width;
