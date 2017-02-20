@@ -40,6 +40,7 @@ class Enemy extends Sprite {
     constructor(ctx, image, x, y, width, height, speed) {
         super(ctx, image, x, y, width, height, speed);
         this.alive = true;
+        this.lives = 3;
     }
     update () {
         if ((this.x + this.width >= canvas.width && this.speed > 0) || (this.x <= 0 && this.speed <0)) {
@@ -97,7 +98,9 @@ function gameSetup(canvasId) {
     greenBomb.src = 'images/laserGreenShot.png';
     redLaser = new Image();
     redLaser.src = 'images/laserRed.png';
-
+    redBomb = new Image();
+    redBomb.src = 'images/laserRedShot.png';
+    
     enemyShipImage = new Image();
     enemyShipImage.src = 'images/enemyShip.png';
 
@@ -107,19 +110,30 @@ function gameSetup(canvasId) {
     addEnemy(271, 1);
     addEnemy(381, 1);
     addEnemy(491, 1);
+    addEnemy(601, 1);
 
-    addEnemy(1, 100);
-    addEnemy(111, 100);
-    addEnemy(221, 100);
-    addEnemy(331, 100);
-    addEnemy(441, 100);
-    addEnemy(551, 100);
-    
+    addEnemy(1, 100, -3);
+    addEnemy(111, 100, -3);
+    addEnemy(221, 100, -3);
+    addEnemy(331, 100, -3);
+    addEnemy(441, 100, -3);
+    addEnemy(551, 100, -3);
+    addEnemy(661, 100, -3);
+
     addEnemy(51, 199);
     addEnemy(161, 199);
     addEnemy(271, 199);
     addEnemy(381, 199);
     addEnemy(491, 199);
+    addEnemy(601, 199);
+
+    addEnemy(1, 298, -3);
+    addEnemy(111, 298, -3);
+    addEnemy(221, 298, -3);
+    addEnemy(331, 298, -3);
+    addEnemy(441, 298, -3);
+    addEnemy(551, 298, -3);
+    addEnemy(661, 298, -3);
 
     bullets = [];
     enemyBullets = [];
@@ -181,11 +195,15 @@ function checkBulletCollisions() {
         } else {
             // Check for bullet player damage.
             if(Sprite.collides(player, enemyBullets[i])){
+                var bomb = (enemyBullets[i].image == redBomb);
                 enemyBullets.splice(i, 1);
-                player.HP -= 1;
-                if(player.HP == 0) {
+                if(bomb)
+                    player.HP -= 50;
+                else
+                    player.HP -= 10;
+                if(player.HP <= 0) {
                     player.lives -= 1;
-                    if(player.lives == 0)
+                    if(player.lives <= 0)
                         break;
                     player.HP = 100;
                     if(player.lives == 2) {
@@ -277,13 +295,26 @@ function addEnemyBullet (enemy) {
         enemy.y + enemy.height,
         redLaser.width,
         redLaser.height,
+        -5
+    );
+    enemyBullets.push(bullet);
+}
+
+function addEnemyBomb (enemy) {
+    var bullet = new Bullet(
+        ctx,
+        redBomb,
+        enemy.x + enemy.width/2 - 4,
+        enemy.y + enemy.height,
+        redBomb.width,
+        redBomb.height,
         -3
     );
     enemyBullets.push(bullet);
 }
 
 
-function addEnemy (x, y) {
+function addEnemy (x, y, speed = 3) {
     var enemy = new Enemy (
         ctx,
         enemyShipImage,
@@ -291,7 +322,7 @@ function addEnemy (x, y) {
         y,
         enemyShipImage.width,
         enemyShipImage.height,
-        3
+        speed
     );
     enemies.push(enemy);
 }
@@ -302,15 +333,21 @@ function animateEnemies() {
             enemies[i].update();
             enemies[i].render();
             // Random chance enemy will shoot.
-            if(Math.random() <= 0.1)
+            var rand = Math.random();
+            if(rand <= 0.1)
                 addEnemyBullet(enemies[i]);
+            if(rand >= 0.99)
+                addEnemyBomb(enemies[i]);
             // Check for bullets hit.
             if(0 < bullets.length) {
                 for(j = 0; j < bullets.length; j++) {
                     if(Sprite.collides(bullets[j], enemies[i])){
-                        enemies.splice(i, 1);
-                        bullets.splice(j, 1);
-                        break;
+                        enemies[i].lives -= 1;
+                        if(enemies[i].lives <= 0) {
+                            enemies.splice(i, 1);
+                            bullets.splice(j, 1);
+                            break;
+                        }
                     }
                 }
             }
